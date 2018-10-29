@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace GoogleNotifier
 {
-    public partial class Form1 : Form
+    public partial class FormGoogleNotifier : Form
     {
-        public Form1()
+        public FormGoogleNotifier()
         {
             InitializeComponent();
         }
