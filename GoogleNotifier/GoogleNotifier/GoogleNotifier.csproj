@@ -162,6 +162,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleHTTPServer.cs" />
     <EmbeddedResource Include="FormGoogleNotifier.resx">
       <DependentUpon>FormGoogleNotifier.cs</DependentUpon>
     </EmbeddedResource>
