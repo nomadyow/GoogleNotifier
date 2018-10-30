@@ -38,25 +38,26 @@ namespace GoogleNotifier
         {
             _serverThread.Abort();
             _listener.Stop();
+            FormGoogleNotifier.webServerListening = false;
         }
 
         private void Listen()
         {
             _listener = new HttpListener();
             _listener.Prefixes.Add("http://*:" + _port.ToString() + "/");
-            bool serverStarted = false;
+            FormGoogleNotifier.webServerListening = false;
             try
             {
                 _listener.Start();
-                serverStarted = true;
+                FormGoogleNotifier.webServerListening = true;
                 
             }
             catch (Exception ex)
             {
-                
+                formGoogleNotifier.webServerError = "failed to start";
             }
 
-            while (serverStarted)
+            while (FormGoogleNotifier.webServerListening)
             {
                 try
                 {
@@ -65,7 +66,7 @@ namespace GoogleNotifier
                 }
                 catch (ThreadAbortException)
                 {
-                    // Web server is shutting down - don't bother to log this specifically
+                    // Web server is shutting down
                 }
                 catch (Exception ex)
                 { }

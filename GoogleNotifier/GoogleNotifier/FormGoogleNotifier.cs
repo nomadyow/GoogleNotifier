@@ -23,6 +23,9 @@ namespace GoogleNotifier
         private SimpleHTTPServer simpleHTTPServer;
         static public Dictionary<string, MemoryStream> textToSpeechFiles = new Dictionary<string, MemoryStream>();
         private string localIP;
+        static public bool webServerListening;
+        static public string webServerError = "";
+        static public int webServerPort;
         private class GoogleReceiverItem
         {
             public string Text { get; set; }
@@ -96,10 +99,21 @@ namespace GoogleNotifier
             }
             catch
             {
-                toolStripStatusLabelWebServerStatus.Text = "Not Listening";
-                toolStripStatusLabelWebServerStatus.ForeColor = Color.Maroon;
+                webServerListening = false;
             }
         }
+
+        private void tick()
+        {
+            toolStripStatusLabelWebServerStatus.Text = "Not Listening";
+            toolStripStatusLabelWebServerStatus.ForeColor = Color.Maroon;
+            if (webServerError == "failed to start")
+            {
+                webServerError = "";
+                // Show error form
+            }
+        }
+
         private void FormGoogleNotifier_Load(object sender, EventArgs e)
         {
             if (File.Exists(Properties.Settings.Default.credentialsFile))
@@ -117,7 +131,6 @@ namespace GoogleNotifier
             checkBoxRemoteEnabled.Checked = Properties.Settings.Default.remoteCommandsEnabled;
 
             StartWebServer();
-
         }
 
         private void FormGoogleNotifier_FormClosing(object sender, FormClosingEventArgs e)
@@ -133,9 +146,14 @@ namespace GoogleNotifier
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.webServerPort = Convert.ToInt32(numericUpDownPort.Value);
-            Properties.Settings.Default.Save();
-            StartWebServer();
+            int newWebServerPort = Convert.ToInt32(numbericUpDownPort.Value);
+            if (webServerPort != newWebServerPort)
+            {
+                Properties.Settings.Default.webServerPort = newWebServerPort;
+                webServerPort = newWebServerPort;
+                Properties.Settings.Default.Save();
+                StartWebServer();
+            }
         }
     }
 }
