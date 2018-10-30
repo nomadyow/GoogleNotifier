@@ -23,6 +23,7 @@ namespace GoogleNotifier
         private SimpleHTTPServer simpleHTTPServer;
         static public Dictionary<string, MemoryStream> textToSpeechFiles = new Dictionary<string, MemoryStream>();
         private string localIP;
+        private Grpc.Core.Channel googleCloudChannel = null;
         static public bool webServerListening;
         static public string webServerError = "";
         static public int webServerPort;
@@ -91,6 +92,8 @@ namespace GoogleNotifier
 
         private void StartWebServer()
         {
+            webServerError = "";
+
             try
             {
                 simpleHTTPServer = new SimpleHTTPServer(Properties.Settings.Default.webServerPort);
@@ -100,17 +103,6 @@ namespace GoogleNotifier
             catch
             {
                 webServerListening = false;
-            }
-        }
-
-        private void tick()
-        {
-            toolStripStatusLabelWebServerStatus.Text = "Not Listening";
-            toolStripStatusLabelWebServerStatus.ForeColor = Color.Maroon;
-            if (webServerError == "failed to start")
-            {
-                webServerError = "";
-                // Show error form
             }
         }
 
@@ -131,6 +123,8 @@ namespace GoogleNotifier
             checkBoxRemoteEnabled.Checked = Properties.Settings.Default.remoteCommandsEnabled;
 
             StartWebServer();
+
+            authenticateGoogle();
         }
 
         private void FormGoogleNotifier_FormClosing(object sender, FormClosingEventArgs e)
@@ -146,13 +140,25 @@ namespace GoogleNotifier
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            int newWebServerPort = Convert.ToInt32(numbericUpDownPort.Value);
+            int newWebServerPort = Convert.ToInt32(numericUpDownPort.Value);
             if (webServerPort != newWebServerPort)
             {
                 Properties.Settings.Default.webServerPort = newWebServerPort;
                 webServerPort = newWebServerPort;
                 Properties.Settings.Default.Save();
                 StartWebServer();
+            }
+        }
+
+        private void timerWebServerWatchdog_Tick(object sender, EventArgs e)
+        {
+            toolStripStatusLabelWebServerStatus.Text = "Not Listening";
+            toolStripStatusLabelWebServerStatus.ForeColor = Color.Maroon;
+            if (webServerError == "failed to start")
+            {
+                webServerError = "";
+                Form formWebServerNotification = new FormWebServerNotification();
+                formWebServerNotification.ShowDialog();
             }
         }
     }

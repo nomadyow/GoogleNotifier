@@ -160,9 +160,18 @@
     <Compile Include="FormGoogleNotifier.Designer.cs">
       <DependentUpon>FormGoogleNotifier.cs</DependentUpon>
     </Compile>
+    <Compile Include="GoogleCloudTextToSpeech.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleHTTPServer.cs" />
+    <Compile Include="WebServerNotification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WebServerNotification.Designer.cs">
+      <DependentUpon>WebServerNotification.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FormGoogleNotifier.resx">
       <DependentUpon>FormGoogleNotifier.cs</DependentUpon>
     </EmbeddedResource>
@@ -175,6 +184,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="WebServerNotification.resx">
+      <DependentUpon>WebServerNotification.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

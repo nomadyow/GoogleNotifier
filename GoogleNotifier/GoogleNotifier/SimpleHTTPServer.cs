@@ -54,7 +54,7 @@ namespace GoogleNotifier
             }
             catch (Exception ex)
             {
-                formGoogleNotifier.webServerError = "failed to start";
+                FormGoogleNotifier.webServerError = "failed to start";
             }
 
             while (FormGoogleNotifier.webServerListening)

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.comboBoxGoogleCastReceivers = new System.Windows.Forms.ComboBox();
             this.openFileDialogCredentials = new System.Windows.Forms.OpenFileDialog();
             this.textBoxJsonCredendials = new System.Windows.Forms.TextBox();
@@ -57,6 +58,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelWebServerStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timerWebServerWatchdog = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPort)).BeginInit();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -331,6 +333,11 @@
             this.toolStripStatusLabelWebServerStatus.Size = new System.Drawing.Size(81, 17);
             this.toolStripStatusLabelWebServerStatus.Text = "Not Listening";
             // 
+            // timerWebServerWatchdog
+            // 
+            this.timerWebServerWatchdog.Interval = 1000;
+            this.timerWebServerWatchdog.Tick += new System.EventHandler(this.timerWebServerWatchdog_Tick);
+            // 
             // FormGoogleNotifier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -408,6 +415,7 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelWebServerStatus;
+        private System.Windows.Forms.Timer timerWebServerWatchdog;
     }
 }
 
