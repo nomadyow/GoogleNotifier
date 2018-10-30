@@ -14,7 +14,6 @@ using System.Windows.Forms;
 
 
 namespace GoogleNotifier
-
 {
     public partial class FormGoogleNotifier : Form
     {
@@ -69,31 +68,34 @@ namespace GoogleNotifier
 
         private async void findReceivers()
         {
-            receivers = await new DeviceLocator().FindReceiversAsync();
-            
-            foreach (var receiver in receivers)
+            try
             {
-                GoogleReceiverItem item = new GoogleReceiverItem
+                receivers = await new DeviceLocator().FindReceiversAsync();
+
+                foreach (var receiver in receivers)
                 {
-                    Text = receiver.FriendlyName,
-                    Id = receiver.Id
-                };
-                this.Invoke((MethodInvoker)delegate
-                {
-                    int index = comboBoxGoogleCastReceivers.Items.Add(item);
-                    if (receiver.Id == Properties.Settings.Default.defaultCastDevice)
+                    GoogleReceiverItem item = new GoogleReceiverItem
                     {
-                        comboBoxGoogleCastReceivers.SelectedIndex = index;
-                    }
-                });
+                        Text = receiver.FriendlyName,
+                        Id = receiver.Id
+                    };
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        int index = comboBoxGoogleCastReceivers.Items.Add(item);
+                        if (receiver.Id == Properties.Settings.Default.defaultCastDevice)
+                        {
+                            comboBoxGoogleCastReceivers.SelectedIndex = index;
+                        }
+                    });
+                }
             }
+            catch { }
             
         }
 
         private void StartWebServer()
         {
             webServerError = "";
-
             try
             {
                 simpleHTTPServer = new SimpleHTTPServer(Properties.Settings.Default.webServerPort);
@@ -124,18 +126,57 @@ namespace GoogleNotifier
 
             StartWebServer();
 
-            authenticateGoogle();
+            googleCloudChannel = authenticateGoogle();
+            int index;
+            Dictionary<string,LanguageItem> languages = ListVoiceLanguages(googleCloudChannel);
+            
+            foreach (KeyValuePair<string, LanguageItem> entry in languages)
+            {
+                index = comboBoxVoiceLanguages.Items.Add(entry.Value);
+                if (Properties.Settings.Default.defaultLanguage == entry.Key)
+                {
+                    comboBoxVoiceLanguages.SelectedIndex = index;
+                }
+            }
+
+            index = comboBoxGender.Items.Add("Male");
+            string voiceGender = Properties.Settings.Default.defaultGender;
+            if (voiceGender == "Male")
+            {
+                comboBoxGender.SelectedIndex = index;
+            }
+            index = comboBoxGender.Items.Add("Female");
+            if (voiceGender == "Female")
+            {
+                comboBoxGender.SelectedIndex = index;
+            }
         }
 
         private void FormGoogleNotifier_FormClosing(object sender, FormClosingEventArgs e)
         {
+            simpleHTTPServer.Stop();
             GoogleReceiverItem item = comboBoxGoogleCastReceivers.SelectedItem as GoogleReceiverItem;
-            Properties.Settings.Default.defaultCastDevice = item.Id.ToString();
+            if (item != null)
+            {
+                Properties.Settings.Default.defaultCastDevice = item.Id.ToString();
+            }
             Properties.Settings.Default.webServerPort = Convert.ToInt32(numericUpDownPort.Value);
             Properties.Settings.Default.authToken = textBoxAuthToken.Text;
             Properties.Settings.Default.requireAuth = checkBoxRequireAuthToken.Checked;
             Properties.Settings.Default.remoteCommandsEnabled = checkBoxRemoteEnabled.Checked;
+            if (comboBoxGender.SelectedText != "")
+            {
+                Properties.Settings.Default.defaultGender = comboBoxGender.SelectedText;
+            }
+            if (comboBoxVoiceLanguages.SelectedText != "")
+            {
+                LanguageItem selectedLanguage = comboBoxVoiceLanguages.SelectedItem as LanguageItem;
+                Properties.Settings.Default.defaultLanguage = selectedLanguage.Id;
+            }
+
             Properties.Settings.Default.Save();
+
+            
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)

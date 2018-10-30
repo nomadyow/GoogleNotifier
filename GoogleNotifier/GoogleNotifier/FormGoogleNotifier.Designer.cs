@@ -259,9 +259,9 @@
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.Location = new System.Drawing.Point(23, 86);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(43, 13);
+            this.label10.Size = new System.Drawing.Size(88, 13);
             this.label10.TabIndex = 20;
-            this.label10.Text = "Voice:";
+            this.label10.Text = "Default Voice:";
             // 
             // label11
             // 
@@ -277,13 +277,13 @@
             this.comboBoxVoiceLanguages.FormattingEnabled = true;
             this.comboBoxVoiceLanguages.Location = new System.Drawing.Point(95, 106);
             this.comboBoxVoiceLanguages.Name = "comboBoxVoiceLanguages";
-            this.comboBoxVoiceLanguages.Size = new System.Drawing.Size(167, 21);
+            this.comboBoxVoiceLanguages.Size = new System.Drawing.Size(208, 21);
             this.comboBoxVoiceLanguages.TabIndex = 22;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(278, 109);
+            this.label12.Location = new System.Drawing.Point(311, 110);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(45, 13);
             this.label12.TabIndex = 23;
@@ -292,7 +292,7 @@
             // comboBoxGender
             // 
             this.comboBoxGender.FormattingEnabled = true;
-            this.comboBoxGender.Location = new System.Drawing.Point(329, 107);
+            this.comboBoxGender.Location = new System.Drawing.Point(360, 106);
             this.comboBoxGender.Name = "comboBoxGender";
             this.comboBoxGender.Size = new System.Drawing.Size(106, 21);
             this.comboBoxGender.TabIndex = 24;
