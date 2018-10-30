@@ -130,5 +130,17 @@ namespace GoogleNotifier.Properties {
                 this["remoteCommandsEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string defaultVoice {
+            get {
+                return ((string)(this["defaultVoice"]));
+            }
+            set {
+                this["defaultVoice"] = value;
+            }
+        }
     }
 }

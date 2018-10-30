@@ -5,11 +5,8 @@ using Google.Apis.Auth.OAuth2;
 using Grpc.Auth;
 using Google.Cloud.TextToSpeech.V1;
 using System.Windows.Forms;
-using GoogleCast;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GoogleNotifier
 {
@@ -25,6 +22,19 @@ namespace GoogleNotifier
                 return Text;
             }
         }
+
+        public class VoiceItem
+        {
+            public string Name { get; set; }
+            public string Gender { get; set; }
+            public string Language { get; set; }
+
+            public override string ToString()
+            {
+                return Name;
+            }
+        }
+
         public Grpc.Core.Channel authenticateGoogle()
         {
             Grpc.Core.Channel googleCloudChannel = null;
@@ -67,37 +77,31 @@ namespace GoogleNotifier
             }
             return languages;
         }
-        public static int ListVoices(Grpc.Core.Channel channel, string desiredLanguageCode = "")
+
+        public static List<VoiceItem> ListVoices(Grpc.Core.Channel channel)
         {
             TextToSpeechClient client = TextToSpeechClient.Create(channel);
 
             // Performs the list voices request
             var response = client.ListVoices(new ListVoicesRequest
-            {
-                LanguageCode = desiredLanguageCode
-            });
+            { });
+
+            List<VoiceItem> voices = new List<VoiceItem>();
 
             foreach (Voice voice in response.Voices)
             {
-                // Display the voices's name.
-                Console.WriteLine($"Name: {voice.Name}");
-
-                // Display the supported language codes for this voice.
                 foreach (var languageCode in voice.LanguageCodes)
                 {
-                    Console.WriteLine($"Supported language(s): {languageCode}");
-                    Console.WriteLine(new CultureInfo($"{languageCode}").DisplayName);
+                    VoiceItem voiceItem = new VoiceItem
+                    {
+                        Name = voice.Name,
+                        Gender = voice.SsmlGender.ToString(),
+                        Language = languageCode,
+                    };
+                    voices.Add(voiceItem);
                 }
-
-                // Display the SSML Voice Gender
-                Console.WriteLine("SSML Voice Gender: " +
-                    (SsmlVoiceGender)voice.SsmlGender);
-
-                // Display the natural sample rate hertz for this voice.
-                Console.WriteLine("Natural Sample Rate Hertz: " +
-                    voice.NaturalSampleRateHertz);
             }
-            return 0;
+            return voices;
         }
 
         public string text_to_mp3(string text, Grpc.Core.Channel channel)

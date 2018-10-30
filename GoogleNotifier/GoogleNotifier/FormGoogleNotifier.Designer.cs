@@ -59,6 +59,8 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelWebServerStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerWebServerWatchdog = new System.Windows.Forms.Timer(this.components);
+            this.label13 = new System.Windows.Forms.Label();
+            this.comboBoxVoice = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPort)).BeginInit();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -66,7 +68,7 @@
             // comboBoxGoogleCastReceivers
             // 
             this.comboBoxGoogleCastReceivers.FormattingEnabled = true;
-            this.comboBoxGoogleCastReceivers.Location = new System.Drawing.Point(27, 208);
+            this.comboBoxGoogleCastReceivers.Location = new System.Drawing.Point(27, 239);
             this.comboBoxGoogleCastReceivers.Name = "comboBoxGoogleCastReceivers";
             this.comboBoxGoogleCastReceivers.Size = new System.Drawing.Size(536, 21);
             this.comboBoxGoogleCastReceivers.TabIndex = 0;
@@ -78,14 +80,14 @@
             // 
             // textBoxJsonCredendials
             // 
-            this.textBoxJsonCredendials.Location = new System.Drawing.Point(74, 157);
+            this.textBoxJsonCredendials.Location = new System.Drawing.Point(74, 188);
             this.textBoxJsonCredendials.Name = "textBoxJsonCredendials";
             this.textBoxJsonCredendials.Size = new System.Drawing.Size(408, 20);
             this.textBoxJsonCredendials.TabIndex = 1;
             // 
             // buttonSelectJson
             // 
-            this.buttonSelectJson.Location = new System.Drawing.Point(488, 155);
+            this.buttonSelectJson.Location = new System.Drawing.Point(488, 186);
             this.buttonSelectJson.Name = "buttonSelectJson";
             this.buttonSelectJson.Size = new System.Drawing.Size(75, 23);
             this.buttonSelectJson.TabIndex = 2;
@@ -96,7 +98,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(42, 160);
+            this.label2.Location = new System.Drawing.Point(42, 191);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 4;
@@ -106,7 +108,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(24, 192);
+            this.label3.Location = new System.Drawing.Point(24, 223);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 5;
@@ -237,7 +239,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(23, 141);
+            this.label1.Location = new System.Drawing.Point(23, 172);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(180, 13);
             this.label1.TabIndex = 3;
@@ -279,6 +281,7 @@
             this.comboBoxVoiceLanguages.Name = "comboBoxVoiceLanguages";
             this.comboBoxVoiceLanguages.Size = new System.Drawing.Size(208, 21);
             this.comboBoxVoiceLanguages.TabIndex = 22;
+            this.comboBoxVoiceLanguages.SelectedIndexChanged += new System.EventHandler(this.comboBoxVoiceLanguages_SelectedIndexChanged);
             // 
             // label12
             // 
@@ -296,6 +299,7 @@
             this.comboBoxGender.Name = "comboBoxGender";
             this.comboBoxGender.Size = new System.Drawing.Size(106, 21);
             this.comboBoxGender.TabIndex = 24;
+            this.comboBoxGender.SelectedIndexChanged += new System.EventHandler(this.comboBoxGender_SelectedIndexChanged);
             // 
             // buttonUpdate
             // 
@@ -338,11 +342,30 @@
             this.timerWebServerWatchdog.Interval = 1000;
             this.timerWebServerWatchdog.Tick += new System.EventHandler(this.timerWebServerWatchdog_Tick);
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(47, 137);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(37, 13);
+            this.label13.TabIndex = 27;
+            this.label13.Text = "Voice:";
+            // 
+            // comboBoxVoice
+            // 
+            this.comboBoxVoice.FormattingEnabled = true;
+            this.comboBoxVoice.Location = new System.Drawing.Point(95, 134);
+            this.comboBoxVoice.Name = "comboBoxVoice";
+            this.comboBoxVoice.Size = new System.Drawing.Size(371, 21);
+            this.comboBoxVoice.TabIndex = 28;
+            // 
             // FormGoogleNotifier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(588, 420);
+            this.Controls.Add(this.comboBoxVoice);
+            this.Controls.Add(this.label13);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.buttonUpdate);
             this.Controls.Add(this.comboBoxGender);
@@ -416,6 +439,8 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelWebServerStatus;
         private System.Windows.Forms.Timer timerWebServerWatchdog;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox comboBoxVoice;
     }
 }
 

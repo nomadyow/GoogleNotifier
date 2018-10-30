@@ -4,11 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using GoogleCast;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,6 +22,9 @@ namespace GoogleNotifier
         static public bool webServerListening;
         static public string webServerError = "";
         static public int webServerPort;
+
+        private static List<VoiceItem> allVoices = new List<VoiceItem>();
+
         private class GoogleReceiverItem
         {
             public string Text { get; set; }
@@ -108,6 +107,23 @@ namespace GoogleNotifier
             }
         }
 
+        private void updateVoiceDisplay()
+        {
+            comboBoxVoice.Items.Clear();
+            LanguageItem currentLanguage = comboBoxVoiceLanguages.SelectedItem as LanguageItem;
+            foreach(VoiceItem voiceItem in allVoices)
+            {
+                if (voiceItem.Gender == comboBoxGender.SelectedItem.ToString() && voiceItem.Language == currentLanguage.Id)
+                {
+                    int index = comboBoxVoice.Items.Add(voiceItem);
+                    if (Properties.Settings.Default.defaultVoice == voiceItem.Name)
+                    {
+                        comboBoxVoice.SelectedIndex = index;
+                    }
+                }
+            }
+        }
+
         private void FormGoogleNotifier_Load(object sender, EventArgs e)
         {
             if (File.Exists(Properties.Settings.Default.credentialsFile))
@@ -128,8 +144,8 @@ namespace GoogleNotifier
 
             googleCloudChannel = authenticateGoogle();
             int index;
-            Dictionary<string,LanguageItem> languages = ListVoiceLanguages(googleCloudChannel);
-            
+            Dictionary<string, LanguageItem> languages = ListVoiceLanguages(googleCloudChannel);
+
             foreach (KeyValuePair<string, LanguageItem> entry in languages)
             {
                 index = comboBoxVoiceLanguages.Items.Add(entry.Value);
@@ -150,11 +166,24 @@ namespace GoogleNotifier
             {
                 comboBoxGender.SelectedIndex = index;
             }
+
+            ListVoices(googleCloudChannel);
+
+            allVoices = ListVoices(googleCloudChannel);
+
+            updateVoiceDisplay();
         }
 
         private void FormGoogleNotifier_FormClosing(object sender, FormClosingEventArgs e)
         {
-            simpleHTTPServer.Stop();
+            if (webServerListening)
+            {
+                try
+                {
+                    simpleHTTPServer.Stop();
+                }
+                catch { }
+            }
             GoogleReceiverItem item = comboBoxGoogleCastReceivers.SelectedItem as GoogleReceiverItem;
             if (item != null)
             {
@@ -164,19 +193,23 @@ namespace GoogleNotifier
             Properties.Settings.Default.authToken = textBoxAuthToken.Text;
             Properties.Settings.Default.requireAuth = checkBoxRequireAuthToken.Checked;
             Properties.Settings.Default.remoteCommandsEnabled = checkBoxRemoteEnabled.Checked;
-            if (comboBoxGender.SelectedText != "")
+            if (comboBoxGender.SelectedIndex >= 0)
             {
-                Properties.Settings.Default.defaultGender = comboBoxGender.SelectedText;
+                Properties.Settings.Default.defaultGender = comboBoxGender.SelectedItem.ToString();
             }
-            if (comboBoxVoiceLanguages.SelectedText != "")
+            if (comboBoxVoiceLanguages.SelectedIndex >= 0)
             {
                 LanguageItem selectedLanguage = comboBoxVoiceLanguages.SelectedItem as LanguageItem;
                 Properties.Settings.Default.defaultLanguage = selectedLanguage.Id;
             }
 
-            Properties.Settings.Default.Save();
+            if (comboBoxVoice.SelectedIndex >= 0)
+            {
+                VoiceItem selectedVoice = comboBoxVoice.SelectedItem as VoiceItem;
+                Properties.Settings.Default.defaultVoice = selectedVoice.Name.ToString();
+            }
 
-            
+            Properties.Settings.Default.Save();
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
@@ -201,6 +234,16 @@ namespace GoogleNotifier
                 Form formWebServerNotification = new FormWebServerNotification();
                 formWebServerNotification.ShowDialog();
             }
+        }
+
+        private void comboBoxGender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVoiceDisplay();
+        }
+
+        private void comboBoxVoiceLanguages_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateVoiceDisplay();
         }
     }
 }
