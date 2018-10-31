@@ -272,7 +272,20 @@ namespace GoogleNotifier
                 }
                 catch
                 { }             
+
             }
+        }
+
+        private void checkBoxRequireAuthToken_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.requireAuth = checkBoxRequireAuthToken.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void checkBoxRemoteEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.remoteCommandsEnabled = checkBoxRemoteEnabled.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 }

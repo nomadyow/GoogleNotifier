@@ -96,6 +96,7 @@ namespace GoogleNotifier
         {
             // Knock off the initial slash
             string url = context.Request.Url.AbsolutePath.Substring(1);
+            Console.WriteLine("Got: " + url);
             // The first part of the remaining path tells us if this is a cast call or a command.   Split on that.
             if (url.Contains("/"))
             {
@@ -108,6 +109,8 @@ namespace GoogleNotifier
                         if (Properties.Settings.Default.requireAuth && !IsAuthorizedToken(body))
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            context.Response.OutputStream.Flush();
+                            context.Response.OutputStream.Close();
                             return;
                         }
                         else
@@ -115,14 +118,15 @@ namespace GoogleNotifier
                             switch (parts[1])
                             {
                                 case "announce":
-                                   
+                                    string text = context.Request.QueryString["text"];
+                                    Console.WriteLine("Text set to:" + text);
                                     context.Response.ContentType = "text/html";
                                     context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
                                     context.Response.AddHeader("Last-Modified", DateTime.Now.ToString("r"));
                                     context.Response.StatusCode = (int)HttpStatusCode.OK;
 
-                                    string text = "Ok";
-                                    byte[] bytes = System.Text.Encoding.UTF8.GetBytes(text);
+                                    string responseText = text;
+                                    byte[] bytes = System.Text.Encoding.UTF8.GetBytes(responseText);
 
                                     context.Response.OutputStream.Write(bytes, 0, bytes.Length);
                                     context.Response.OutputStream.Flush();

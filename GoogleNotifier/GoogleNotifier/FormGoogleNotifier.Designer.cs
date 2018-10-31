@@ -183,6 +183,7 @@
             this.checkBoxRemoteEnabled.TabIndex = 12;
             this.checkBoxRemoteEnabled.Text = "Enable Remote Access Commands";
             this.checkBoxRemoteEnabled.UseVisualStyleBackColor = true;
+            this.checkBoxRemoteEnabled.CheckedChanged += new System.EventHandler(this.checkBoxRemoteEnabled_CheckedChanged);
             // 
             // checkBoxRequireAuthToken
             // 
@@ -193,6 +194,7 @@
             this.checkBoxRequireAuthToken.TabIndex = 13;
             this.checkBoxRequireAuthToken.Text = "Require Auth Token";
             this.checkBoxRequireAuthToken.UseVisualStyleBackColor = true;
+            this.checkBoxRequireAuthToken.CheckedChanged += new System.EventHandler(this.checkBoxRequireAuthToken_CheckedChanged);
             // 
             // label7
             // 
