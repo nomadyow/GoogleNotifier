@@ -106,7 +106,7 @@ namespace GoogleNotifier
                     case "command":
                         // Commands may need to have an auth token supplied in the body
                         var body = new StreamReader(context.Request.InputStream).ReadToEnd();
-                        if (Properties.Settings.Default.requireAuth && !IsAuthorizedToken(body))
+                        if (Properties.Settings.Default.remoteCommandsEnabled && Properties.Settings.Default.requireAuth && !IsAuthorizedToken(body))
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                             context.Response.OutputStream.Flush();

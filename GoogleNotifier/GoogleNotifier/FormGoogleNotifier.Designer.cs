@@ -80,9 +80,9 @@
             // 
             // textBoxJsonCredendials
             // 
-            this.textBoxJsonCredendials.Location = new System.Drawing.Point(74, 188);
+            this.textBoxJsonCredendials.Location = new System.Drawing.Point(95, 188);
             this.textBoxJsonCredendials.Name = "textBoxJsonCredendials";
-            this.textBoxJsonCredendials.Size = new System.Drawing.Size(408, 20);
+            this.textBoxJsonCredendials.Size = new System.Drawing.Size(387, 20);
             this.textBoxJsonCredendials.TabIndex = 1;
             // 
             // buttonSelectJson
@@ -98,7 +98,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(42, 191);
+            this.label2.Location = new System.Drawing.Point(64, 191);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 4;
@@ -146,7 +146,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(220, 290);
+            this.label6.Location = new System.Drawing.Point(204, 292);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(29, 13);
             this.label6.TabIndex = 9;
@@ -154,7 +154,7 @@
             // 
             // numericUpDownPort
             // 
-            this.numericUpDownPort.Location = new System.Drawing.Point(255, 288);
+            this.numericUpDownPort.Location = new System.Drawing.Point(239, 288);
             this.numericUpDownPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -184,10 +184,12 @@
             this.checkBoxRemoteEnabled.Text = "Enable Remote Access Commands";
             this.checkBoxRemoteEnabled.UseVisualStyleBackColor = true;
             this.checkBoxRemoteEnabled.CheckedChanged += new System.EventHandler(this.checkBoxRemoteEnabled_CheckedChanged);
+            this.checkBoxRemoteEnabled.CheckStateChanged += new System.EventHandler(this.checkBoxRemoteEnabled_CheckStateChanged);
             // 
             // checkBoxRequireAuthToken
             // 
             this.checkBoxRequireAuthToken.AutoSize = true;
+            this.checkBoxRequireAuthToken.Enabled = false;
             this.checkBoxRequireAuthToken.Location = new System.Drawing.Point(26, 340);
             this.checkBoxRequireAuthToken.Name = "checkBoxRequireAuthToken";
             this.checkBoxRequireAuthToken.Size = new System.Drawing.Size(122, 17);
@@ -195,6 +197,8 @@
             this.checkBoxRequireAuthToken.Text = "Require Auth Token";
             this.checkBoxRequireAuthToken.UseVisualStyleBackColor = true;
             this.checkBoxRequireAuthToken.CheckedChanged += new System.EventHandler(this.checkBoxRequireAuthToken_CheckedChanged);
+            this.checkBoxRequireAuthToken.CheckStateChanged += new System.EventHandler(this.checkBoxRequireAuthToken_CheckStateChanged);
+            this.checkBoxRequireAuthToken.EnabledChanged += new System.EventHandler(this.checkBoxRequireAuthToken_EnabledChanged);
             // 
             // label7
             // 
@@ -207,10 +211,12 @@
             // 
             // textBoxAuthToken
             // 
+            this.textBoxAuthToken.Enabled = false;
             this.textBoxAuthToken.Location = new System.Drawing.Point(70, 363);
             this.textBoxAuthToken.Name = "textBoxAuthToken";
-            this.textBoxAuthToken.Size = new System.Drawing.Size(486, 20);
+            this.textBoxAuthToken.Size = new System.Drawing.Size(493, 20);
             this.textBoxAuthToken.TabIndex = 14;
+            this.textBoxAuthToken.Leave += new System.EventHandler(this.textBoxAuthToken_Leave);
             // 
             // label8
             // 
@@ -223,7 +229,7 @@
             // 
             // buttonToSpeech
             // 
-            this.buttonToSpeech.Location = new System.Drawing.Point(488, 45);
+            this.buttonToSpeech.Location = new System.Drawing.Point(488, 46);
             this.buttonToSpeech.Name = "buttonToSpeech";
             this.buttonToSpeech.Size = new System.Drawing.Size(75, 23);
             this.buttonToSpeech.TabIndex = 17;
@@ -271,7 +277,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(30, 107);
+            this.label11.Location = new System.Drawing.Point(32, 110);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 21;
@@ -306,7 +312,7 @@
             // 
             // buttonUpdate
             // 
-            this.buttonUpdate.Location = new System.Drawing.Point(343, 288);
+            this.buttonUpdate.Location = new System.Drawing.Point(326, 288);
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(75, 23);
             this.buttonUpdate.TabIndex = 25;
@@ -348,7 +354,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(47, 137);
+            this.label13.Location = new System.Drawing.Point(53, 137);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(37, 13);
             this.label13.TabIndex = 27;

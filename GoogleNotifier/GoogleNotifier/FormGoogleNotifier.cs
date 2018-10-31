@@ -194,9 +194,8 @@ namespace GoogleNotifier
                 Properties.Settings.Default.defaultCastDevice = item.Id.ToString();
             }
             Properties.Settings.Default.webServerPort = Convert.ToInt32(numericUpDownPort.Value);
-            Properties.Settings.Default.authToken = textBoxAuthToken.Text;
-            Properties.Settings.Default.requireAuth = checkBoxRequireAuthToken.Checked;
-            Properties.Settings.Default.remoteCommandsEnabled = checkBoxRemoteEnabled.Checked;
+
+
             if (comboBoxGender.SelectedIndex >= 0)
             {
                 Properties.Settings.Default.defaultGender = comboBoxGender.SelectedItem.ToString();
@@ -285,6 +284,48 @@ namespace GoogleNotifier
         private void checkBoxRemoteEnabled_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.remoteCommandsEnabled = checkBoxRemoteEnabled.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void checkBoxRequireAuthToken_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (checkBoxRequireAuthToken.Checked && checkBoxRemoteEnabled.Checked)
+            {
+                textBoxAuthToken.Enabled = true;
+            }
+            else
+            {
+                textBoxAuthToken.Enabled = false;
+            }
+        }
+
+        private void checkBoxRemoteEnabled_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (checkBoxRemoteEnabled.Checked)
+            {
+                checkBoxRequireAuthToken.Enabled = true;
+            }
+            else
+            {
+                checkBoxRequireAuthToken.Enabled = false;
+            }
+        }
+
+        private void checkBoxRequireAuthToken_EnabledChanged(object sender, EventArgs e)
+        {
+            if (checkBoxRequireAuthToken.Enabled && checkBoxRequireAuthToken.Checked && checkBoxRemoteEnabled.Checked)
+            {
+                textBoxAuthToken.Enabled = true;
+            }
+            else
+            {
+                textBoxAuthToken.Enabled = false;
+            }
+        }
+
+        private void textBoxAuthToken_Leave(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.authToken = textBoxAuthToken.Text;
             Properties.Settings.Default.Save();
         }
     }
