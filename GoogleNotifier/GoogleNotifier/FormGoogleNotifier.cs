@@ -19,14 +19,11 @@ namespace GoogleNotifier
         static public FormGoogleNotifier formGoogleNotifier;
         private SimpleHTTPServer simpleHTTPServer;
         static public Dictionary<string, MemoryStream> textToSpeechFiles = new Dictionary<string, MemoryStream>();
-        private string localIP;
         private Grpc.Core.Channel googleCloudChannel = null;
         static public bool webServerListening;
         static public string webServerError = "";
         static public int webServerPort;
-
-        private IReceiver googleHomeReceiver;
-
+        IReceiver googleHomeReceiver;
         private static List<VoiceItem> allVoices = new List<VoiceItem>();
 
         private class GoogleReceiverItem
@@ -114,6 +111,7 @@ namespace GoogleNotifier
         private void updateVoiceDisplay()
         {
             comboBoxVoice.Items.Clear();
+            comboBoxVoice.Text = "";
             LanguageItem currentLanguage = comboBoxVoiceLanguages.SelectedItem as LanguageItem;
             foreach(VoiceItem voiceItem in allVoices)
             {
@@ -226,7 +224,7 @@ namespace GoogleNotifier
                 StartWebServer();
             }
         }
-
+        
         private void timerWebServerWatchdog_Tick(object sender, EventArgs e)
         {
             toolStripStatusLabelWebServerStatus.Text = "Not Listening";
@@ -257,20 +255,43 @@ namespace GoogleNotifier
                 LanguageItem selectedLanguage = comboBoxVoiceLanguages.SelectedItem as LanguageItem;
                 VoiceItem selectedVoice = comboBoxVoice.SelectedItem as VoiceItem;
 
-                string speechAudioFile = text_to_mp3(textBoxToSpeech.Text, googleCloudChannel, selectedLanguage.ToString(), comboBoxGender.Text, selectedVoice.ToString());
-
-                await castSender.ConnectAsync(googleHomeReceiver);
-                var mediaChannel = castSender.GetChannel<IMediaChannel>();
-                await castSender.LaunchAsync(mediaChannel);
-                string url = "http://" + localIP + ":" + Properties.Settings.Default.webServerPort + "/cast/" + speechAudioFile;
-
-
-                try
+                if (selectedLanguage == null || selectedVoice == null || comboBoxGender.Text == null)
                 {
-                    var mediaStatus = await mediaChannel.LoadAsync(new MediaInformation() { ContentId = url });
+                    return;
                 }
-                catch
-                { }             
+
+                string speechAudioFile = text_to_mp3(textBoxToSpeech.Text, googleCloudChannel, selectedLanguage.Id.ToString(), comboBoxGender.Text, selectedVoice.ToString());
+
+                GoogleReceiverItem googleReceiverItem = new GoogleReceiverItem();
+
+                googleReceiverItem = comboBoxGoogleCastReceivers.SelectedItem as GoogleReceiverItem;
+
+                string receiverName = googleReceiverItem.Id;
+                var receivers = await new DeviceLocator().FindReceiversAsync();
+
+                googleHomeReceiver = null;
+                foreach (var receiver in receivers)
+                {
+                    if (receiver.Id == receiverName)
+                    {
+                        googleHomeReceiver = receiver;
+                    }
+                }
+                if (googleHomeReceiver != null)
+                {
+                    await castSender.ConnectAsync(googleHomeReceiver);
+                    var mediaChannel = castSender.GetChannel<IMediaChannel>();
+                    await castSender.LaunchAsync(mediaChannel);
+                    string url = "http://" + labelIPAddress.Text + ":" + Properties.Settings.Default.webServerPort + "/cast/" + speechAudioFile;
+
+
+                    try
+                    {
+                        var mediaStatus = await mediaChannel.LoadAsync(new MediaInformation() { ContentId = url });
+                    }
+                    catch
+                    { }
+                }
 
             }
         }
