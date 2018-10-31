@@ -103,9 +103,9 @@ namespace GoogleNotifier
                 switch (parts[0])
                 {
                     case "command":
-                        // Commands need to have an auth token supplied in the body
+                        // Commands may need to have an auth token supplied in the body
                         var body = new StreamReader(context.Request.InputStream).ReadToEnd();
-                        if (!IsAuthorizedToken(body))
+                        if (Properties.Settings.Default.requireAuth && !IsAuthorizedToken(body))
                         {
                             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                             return;
@@ -114,7 +114,7 @@ namespace GoogleNotifier
                         {
                             switch (parts[1])
                             {
-                                case "transparent":
+                                case "announce":
                                    
                                     context.Response.ContentType = "text/html";
                                     context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
