@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using GoogleCast;
+using GoogleCast.Channels;
+using GoogleCast.Models.Media;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -22,6 +24,8 @@ namespace GoogleNotifier
         static public bool webServerListening;
         static public string webServerError = "";
         static public int webServerPort;
+
+        private IReceiver googleHomeReceiver;
 
         private static List<VoiceItem> allVoices = new List<VoiceItem>();
 
@@ -244,6 +248,31 @@ namespace GoogleNotifier
         private void comboBoxVoiceLanguages_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateVoiceDisplay();
+        }
+
+        private async void buttonToSpeech_Click(object sender, EventArgs e)
+        {
+            if (textBoxToSpeech.Text != "")
+            {
+                var castSender = new Sender();
+                LanguageItem selectedLanguage = comboBoxVoiceLanguages.SelectedItem as LanguageItem;
+                VoiceItem selectedVoice = comboBoxVoice.SelectedItem as VoiceItem;
+
+                string speechAudioFile = text_to_mp3(textBoxToSpeech.Text, googleCloudChannel, selectedLanguage.ToString(), comboBoxGender.Text, selectedVoice.ToString());
+
+                await castSender.ConnectAsync(googleHomeReceiver);
+                var mediaChannel = castSender.GetChannel<IMediaChannel>();
+                await castSender.LaunchAsync(mediaChannel);
+                string url = "http://" + localIP + ":" + Properties.Settings.Default.webServerPort + "/cast/" + speechAudioFile;
+
+
+                try
+                {
+                    var mediaStatus = await mediaChannel.LoadAsync(new MediaInformation() { ContentId = url });
+                }
+                catch
+                { }             
+            }
         }
     }
 }

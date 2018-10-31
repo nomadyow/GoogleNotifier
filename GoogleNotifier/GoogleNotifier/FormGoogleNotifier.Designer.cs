@@ -45,8 +45,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxAuthToken = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.buttonToSpeech = new System.Windows.Forms.Button();
+            this.textBoxToSpeech = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -219,21 +219,22 @@
             this.label8.TabIndex = 18;
             this.label8.Text = "Text:";
             // 
-            // button2
+            // buttonToSpeech
             // 
-            this.button2.Location = new System.Drawing.Point(488, 45);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 17;
-            this.button2.Text = "Notify";
-            this.button2.UseVisualStyleBackColor = true;
+            this.buttonToSpeech.Location = new System.Drawing.Point(488, 45);
+            this.buttonToSpeech.Name = "buttonToSpeech";
+            this.buttonToSpeech.Size = new System.Drawing.Size(75, 23);
+            this.buttonToSpeech.TabIndex = 17;
+            this.buttonToSpeech.Text = "To Speech";
+            this.buttonToSpeech.UseVisualStyleBackColor = true;
+            this.buttonToSpeech.Click += new System.EventHandler(this.buttonToSpeech_Click);
             // 
-            // textBox2
+            // textBoxToSpeech
             // 
-            this.textBox2.Location = new System.Drawing.Point(56, 48);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(426, 20);
-            this.textBox2.TabIndex = 16;
+            this.textBoxToSpeech.Location = new System.Drawing.Point(56, 48);
+            this.textBoxToSpeech.Name = "textBoxToSpeech";
+            this.textBoxToSpeech.Size = new System.Drawing.Size(426, 20);
+            this.textBoxToSpeech.TabIndex = 16;
             // 
             // label1
             // 
@@ -375,8 +376,8 @@
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.buttonToSpeech);
+            this.Controls.Add(this.textBoxToSpeech);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.textBoxAuthToken);
             this.Controls.Add(this.checkBoxRequireAuthToken);
@@ -425,8 +426,8 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBoxAuthToken;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button buttonToSpeech;
+        private System.Windows.Forms.TextBox textBoxToSpeech;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;

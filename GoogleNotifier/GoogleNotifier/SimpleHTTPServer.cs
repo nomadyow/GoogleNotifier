@@ -52,7 +52,7 @@ namespace GoogleNotifier
                 FormGoogleNotifier.webServerListening = true;
                 
             }
-            catch (Exception ex)
+            catch 
             {
                 FormGoogleNotifier.webServerError = "failed to start";
             }
@@ -68,7 +68,7 @@ namespace GoogleNotifier
                 {
                     // Web server is shutting down
                 }
-                catch (Exception ex)
+                catch 
                 { }
             }
         }
@@ -173,7 +173,7 @@ namespace GoogleNotifier
                                 // Dispose of the audio Stream
                                 FormGoogleNotifier.textToSpeechFiles.Remove(filename);
                             }
-                            catch (Exception ex)
+                            catch
                             {
                                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                             }

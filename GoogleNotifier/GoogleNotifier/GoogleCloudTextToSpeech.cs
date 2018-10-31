@@ -46,7 +46,7 @@ namespace GoogleNotifier
 
                     googleCloudChannel = new Grpc.Core.Channel(TextToSpeechClient.DefaultEndpoint.ToString(), credential.ToChannelCredentials());
                 }
-                catch (Exception ex)
+                catch
                 { }
             }
             return googleCloudChannel;
@@ -104,7 +104,7 @@ namespace GoogleNotifier
             return voices;
         }
 
-        public string text_to_mp3(string text, Grpc.Core.Channel channel)
+        public string text_to_mp3(string text, Grpc.Core.Channel channel, string LanguageCode, string Gender, string Voice)
         {
             TextToSpeechClient client = TextToSpeechClient.Create(channel);
 
@@ -114,10 +114,21 @@ namespace GoogleNotifier
 
             };
 
+            SsmlVoiceGender gender;
+            if (Gender == "Female")
+            {
+                gender = SsmlVoiceGender.Female;
+            }
+            else
+            {
+                gender = SsmlVoiceGender.Male;
+            }
+
             var voiceSelection = new VoiceSelectionParams
             {
-                LanguageCode = "USen",
-                SsmlGender = SsmlVoiceGender.Female
+                LanguageCode = LanguageCode,
+                SsmlGender = gender,
+                Name = Voice
 
             };
             var audioConfig = new AudioConfig
@@ -132,8 +143,10 @@ namespace GoogleNotifier
             MemoryStream newTextToSpeech = new MemoryStream();
             response.AudioContent.WriteTo(newTextToSpeech);
 
+            //Add it to the dictionary
             textToSpeechFiles[filename] = newTextToSpeech;
 
+            //and return the filename as the key
             return filename;
         }
     }
