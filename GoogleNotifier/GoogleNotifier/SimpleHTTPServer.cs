@@ -1,6 +1,3 @@
-// MIT License - Copyright (c) 2016 Can Güney Aksakalli
-// https://aksakalli.github.io/2014/02/24/simple-http-server-with-csparp.html
-
 using System;
 using System.Net;
 using System.IO;
@@ -13,58 +10,39 @@ using GoogleCast.Models.Media;
 
 namespace GoogleNotifier
 {
-    public class SimpleHTTPServer
+    public partial class FormGoogleNotifier : Form
     {
         private Thread _serverThread;
         private HttpListener _listener;
         private int _port;
 
-        public int Port
+        public void StopWebServer(ref Thread serverThread, ref HttpListener listener)
         {
-            get { return _port; }
-            private set { }
+            serverThread.Abort();
+            listener.Stop();
+            webServerListening = false;
         }
 
-        /// <summary>
-        /// Construct server with given port.
-        /// </summary>
-        /// <param name="port">Port of the server.</param>
-        public SimpleHTTPServer(int port)
+        private void WebListen(ref HTTPListener listener)
         {
-            this.Initialize(port);
-        }
-
-        /// <summary>
-        /// Stop server and dispose all functions.
-        /// </summary>
-        public void Stop()
-        {
-            _serverThread.Abort();
-            _listener.Stop();
-            FormGoogleNotifier.webServerListening = false;
-        }
-
-        private void Listen()
-        {
-            _listener = new HttpListener();
-            _listener.Prefixes.Add("http://*:" + _port.ToString() + "/");
-            FormGoogleNotifier.webServerListening = false;
+            listener.Prefixes.Add("http://*:" + _port.ToString() + "/");
+            webServerListening = false;
             try
             {
-                _listener.Start();
-                FormGoogleNotifier.webServerListening = true;
+                listener.Start();
+                webServerListening = true;
                 
             }
             catch 
             {
-                FormGoogleNotifier.webServerError = "failed to start";
+                webServerError = "failed to start";
             }
 
-            while (FormGoogleNotifier.webServerListening)
+            while (webServerListening)
             {
                 try
                 {
-                    HttpListenerContext context = _listener.GetContext();
+                    HttpListenerContext context = listener.GetContext();
                     Process(context);
                 }
                 catch (ThreadAbortException)
@@ -231,11 +209,11 @@ namespace GoogleNotifier
             }
         }
 
-        private void Initialize(int port)
+        private Thread WebServerInitialize(int port)
         {
-            this._port = port;
-            _serverThread = new Thread(this.Listen);
-            _serverThread.Start();
+            Thread serverThread = new Thread(WebListen);
+            serverThread.Start();
+            return serverThread;
         }
     }
 }
