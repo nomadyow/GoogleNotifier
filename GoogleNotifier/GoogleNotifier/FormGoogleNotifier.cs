@@ -15,15 +15,16 @@ namespace GoogleNotifier
 {
     public partial class FormGoogleNotifier : Form
     {
-        private IEnumerable<IReceiver> receivers;
+        public IEnumerable<IReceiver> receivers;
         static public FormGoogleNotifier formGoogleNotifier;
         private SimpleHTTPServer simpleHTTPServer;
         static public Dictionary<string, MemoryStream> textToSpeechFiles = new Dictionary<string, MemoryStream>();
         private Grpc.Core.Channel googleCloudChannel = null;
         static public bool webServerListening;
-        static public string webServerError = "";
+        static public string webServerError;
         static public int webServerPort;
         IReceiver googleHomeReceiver;
+
         private static List<VoiceItem> allVoices = new List<VoiceItem>();
 
         private class GoogleReceiverItem
@@ -66,7 +67,7 @@ namespace GoogleNotifier
             }
         }
 
-        private async void findReceivers()
+        private async void addReceivers()
         {
             try
             {
@@ -132,7 +133,7 @@ namespace GoogleNotifier
             {
                 textBoxJsonCredendials.Text = Properties.Settings.Default.credentialsFile;
             }
-            Task task = new Task(new Action(findReceivers));
+            Task task = new Task(new Action(addReceivers));
             task.Start();
 
             labelIPAddress.Text = GetLocalIPAddress();
@@ -186,11 +187,7 @@ namespace GoogleNotifier
                 }
                 catch { }
             }
-            GoogleReceiverItem item = comboBoxGoogleCastReceivers.SelectedItem as GoogleReceiverItem;
-            if (item != null)
-            {
-                Properties.Settings.Default.defaultCastDevice = item.Id.ToString();
-            }
+            
             Properties.Settings.Default.webServerPort = Convert.ToInt32(numericUpDownPort.Value);
 
 
@@ -247,6 +244,30 @@ namespace GoogleNotifier
             updateVoiceDisplay();
         }
 
+        public IReceiver findReceiverById(string id)
+        {
+            foreach (var receiver in receivers)
+            {
+                if (receiver.Id == id)
+                {
+                    return receiver;
+                }
+            }
+            return null;
+        }
+
+        public IReceiver findReceiverByName(string name)
+        {
+            foreach (var receiver in receivers)
+            {
+                if (receiver.FriendlyName == name)
+                {
+                    return receiver;
+                }
+            }
+            return null;
+        }
+
         private async void buttonToSpeech_Click(object sender, EventArgs e)
         {
             if (textBoxToSpeech.Text != "")
@@ -266,17 +287,10 @@ namespace GoogleNotifier
 
                 googleReceiverItem = comboBoxGoogleCastReceivers.SelectedItem as GoogleReceiverItem;
 
-                string receiverName = googleReceiverItem.Id;
                 var receivers = await new DeviceLocator().FindReceiversAsync();
 
-                googleHomeReceiver = null;
-                foreach (var receiver in receivers)
-                {
-                    if (receiver.Id == receiverName)
-                    {
-                        googleHomeReceiver = receiver;
-                    }
-                }
+                googleHomeReceiver = findReceiverById(googleReceiverItem.Id);
+
                 if (googleHomeReceiver != null)
                 {
                     await castSender.ConnectAsync(googleHomeReceiver);
@@ -347,6 +361,16 @@ namespace GoogleNotifier
         private void textBoxAuthToken_Leave(object sender, EventArgs e)
         {
             Properties.Settings.Default.authToken = textBoxAuthToken.Text;
+            Properties.Settings.Default.Save();
+        }
+
+        private void comboBoxGoogleCastReceivers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GoogleReceiverItem item = comboBoxGoogleCastReceivers.SelectedItem as GoogleReceiverItem;
+            if (item != null)
+            {
+                Properties.Settings.Default.defaultCastDevice = item.Id.ToString();
+            }
             Properties.Settings.Default.Save();
         }
     }

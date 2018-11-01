@@ -7,6 +7,9 @@ using System.IO;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using GoogleCast;
+using GoogleCast.Channels;
+using GoogleCast.Models.Media;
 
 namespace GoogleNotifier
 {
@@ -92,6 +95,12 @@ namespace GoogleNotifier
             return false;
         }
 
+        private void badRequest(HttpListenerContext context)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            context.Response.OutputStream.Flush();
+            context.Response.OutputStream.Close();
+        }
         private void Process(HttpListenerContext context)
         {
             // Knock off the initial slash
@@ -119,7 +128,32 @@ namespace GoogleNotifier
                             {
                                 case "announce":
                                     string text = context.Request.QueryString["text"];
-                                    Console.WriteLine("Text set to:" + text);
+                                    if (text == null || text == "")
+                                    {
+                                        badRequest(context);
+                                        return;
+                                    }
+                                    string receiverName = context.Request.QueryString["castreceiver"];
+                                    string receiverID = "";
+                                    IReceiver receiver;
+                                    if (receiverName == null || receiverName == "")
+                                    {
+                                        //Use the receiver from the UI
+                                        if (Properties.Settings.Default.defaultCastDevice != "")
+                                        {
+                                            receiverID = Properties.Settings.Default.defaultCastDevice;
+                                        
+                                        }
+                                        else
+                                        {
+                                            badRequest(context);
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        
+                                    }
                                     context.Response.ContentType = "text/html";
                                     context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
                                     context.Response.AddHeader("Last-Modified", DateTime.Now.ToString("r"));

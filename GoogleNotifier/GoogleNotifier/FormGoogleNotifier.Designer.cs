@@ -72,6 +72,7 @@
             this.comboBoxGoogleCastReceivers.Name = "comboBoxGoogleCastReceivers";
             this.comboBoxGoogleCastReceivers.Size = new System.Drawing.Size(536, 21);
             this.comboBoxGoogleCastReceivers.TabIndex = 0;
+            this.comboBoxGoogleCastReceivers.SelectedIndexChanged += new System.EventHandler(this.comboBoxGoogleCastReceivers_SelectedIndexChanged);
             // 
             // openFileDialogCredentials
             // 
