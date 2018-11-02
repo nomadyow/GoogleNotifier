@@ -5,31 +5,32 @@ using System.Threading;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using GoogleCast;
-using GoogleCast.Channels;
-using GoogleCast.Models.Media;
+using System.Windows.Forms;
+
 
 namespace GoogleNotifier
 {
     public partial class FormGoogleNotifier : Form
     {
-        private Thread _serverThread;
-        private HttpListener _listener;
-        private int _port;
+        private Thread serverThread;
+        private HttpListener httpListener;
 
-        public void StopWebServer(ref Thread serverThread, ref HttpListener listener)
+
+        public void WebServerStop(ref Thread serverThread, ref HttpListener listener)
         {
             serverThread.Abort();
             listener.Stop();
             webServerListening = false;
         }
 
-        private void WebListen(ref HTTPListener listener)
+        private void WebListen()
         {
-            listener.Prefixes.Add("http://*:" + _port.ToString() + "/");
+            httpListener = new HttpListener();
+            httpListener.Prefixes.Add("http://*:" + Properties.Settings.Default.webServerPort + "/");
             webServerListening = false;
             try
             {
-                listener.Start();
+                httpListener.Start();
                 webServerListening = true;
                 
             }
@@ -42,7 +43,7 @@ namespace GoogleNotifier
             {
                 try
                 {
-                    HttpListenerContext context = listener.GetContext();
+                    HttpListenerContext context = httpListener.GetContext();
                     Process(context);
                 }
                 catch (ThreadAbortException)
@@ -211,6 +212,7 @@ namespace GoogleNotifier
 
         private Thread WebServerInitialize(int port)
         {
+            
             Thread serverThread = new Thread(WebListen);
             serverThread.Start();
             return serverThread;

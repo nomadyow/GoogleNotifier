@@ -17,7 +17,7 @@ namespace GoogleNotifier
     {
         public IEnumerable<IReceiver> receivers;
         static public FormGoogleNotifier formGoogleNotifier;
-        private SimpleHTTPServer simpleHTTPServer;
+        
         static public Dictionary<string, MemoryStream> textToSpeechFiles = new Dictionary<string, MemoryStream>();
         private Grpc.Core.Channel googleCloudChannel = null;
         static public bool webServerListening;
@@ -99,7 +99,7 @@ namespace GoogleNotifier
             webServerError = "";
             try
             {
-                simpleHTTPServer = new SimpleHTTPServer(Properties.Settings.Default.webServerPort);
+                WebServerInitialize(Properties.Settings.Default.webServerPort);
                 toolStripStatusLabelWebServerStatus.Text = "Listening";
                 toolStripStatusLabelWebServerStatus.ForeColor = Color.ForestGreen;
             }
@@ -183,7 +183,7 @@ namespace GoogleNotifier
             {
                 try
                 {
-                    simpleHTTPServer.Stop();
+                    WebServerStop(ref serverThread,ref httpListener);
                 }
                 catch { }
             }
