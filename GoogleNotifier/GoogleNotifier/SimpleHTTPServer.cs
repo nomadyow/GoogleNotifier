@@ -121,7 +121,7 @@ namespace GoogleNotifier
                                         if (Properties.Settings.Default.defaultCastDevice != "")
                                         {
                                             receiverID = Properties.Settings.Default.defaultCastDevice;
-                                        
+                                            receiver = findReceiverById(receiverID);
                                         }
                                         else
                                         {
@@ -131,8 +131,33 @@ namespace GoogleNotifier
                                     }
                                     else
                                     {
-                                        
+                                        receiver = findReceiverByName(receiverName);
                                     }
+                                    if (receiver == null)
+                                    {
+                                        badRequest(context);
+                                        return;
+                                    }
+                                    string voiceGender = context.Request.QueryString["gender"].ToLower();
+                                    string voiceLanguage = context.Request.QueryString["language"].ToLower();
+                                    string voiceName = context.Request.QueryString["voice"].ToLower();
+
+                                    if (voiceGender == null || voiceGender == "")
+                                    {
+                                        //Fall back to UI
+                                        voiceGender = Properties.Settings.Default.defaultGender; 
+                                    }
+                                    if (voiceLanguage == null || voiceLanguage == "")
+                                    {
+                                        voiceLanguage = Properties.Settings.Default.defaultLanguage;
+                                    }
+                                    if (voiceName == null || voiceName == "")
+                                    {
+                                        voiceName = Properties.Settings.Default.defaultVoice;
+                                    }
+
+
+
                                     context.Response.ContentType = "text/html";
                                     context.Response.AddHeader("Date", DateTime.Now.ToString("r"));
                                     context.Response.AddHeader("Last-Modified", DateTime.Now.ToString("r"));

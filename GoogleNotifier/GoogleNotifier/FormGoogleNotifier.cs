@@ -189,23 +189,9 @@ namespace GoogleNotifier
             }
             
             Properties.Settings.Default.webServerPort = Convert.ToInt32(numericUpDownPort.Value);
+         
 
-
-            if (comboBoxGender.SelectedIndex >= 0)
-            {
-                Properties.Settings.Default.defaultGender = comboBoxGender.SelectedItem.ToString();
-            }
-            if (comboBoxVoiceLanguages.SelectedIndex >= 0)
-            {
-                LanguageItem selectedLanguage = comboBoxVoiceLanguages.SelectedItem as LanguageItem;
-                Properties.Settings.Default.defaultLanguage = selectedLanguage.Id;
-            }
-
-            if (comboBoxVoice.SelectedIndex >= 0)
-            {
-                VoiceItem selectedVoice = comboBoxVoice.SelectedItem as VoiceItem;
-                Properties.Settings.Default.defaultVoice = selectedVoice.Name.ToString();
-            }
+         
 
             Properties.Settings.Default.Save();
         }
@@ -237,11 +223,20 @@ namespace GoogleNotifier
         private void comboBoxGender_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateVoiceDisplay();
+            if (comboBoxGender.SelectedIndex >= 0)
+            {
+                Properties.Settings.Default.defaultGender = comboBoxGender.SelectedItem.ToString();
+            }
         }
 
         private void comboBoxVoiceLanguages_SelectedIndexChanged(object sender, EventArgs e)
         {
             updateVoiceDisplay();
+            if (comboBoxVoiceLanguages.SelectedIndex >= 0)
+            {
+                LanguageItem selectedLanguage = comboBoxVoiceLanguages.SelectedItem as LanguageItem;
+                Properties.Settings.Default.defaultLanguage = selectedLanguage.Id;
+            }
         }
 
         public IReceiver findReceiverById(string id)
@@ -372,6 +367,15 @@ namespace GoogleNotifier
                 Properties.Settings.Default.defaultCastDevice = item.Id.ToString();
             }
             Properties.Settings.Default.Save();
+        }
+
+        private void comboBoxVoice_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxVoice.SelectedIndex >= 0)
+            {
+                VoiceItem selectedVoice = comboBoxVoice.SelectedItem as VoiceItem;
+                Properties.Settings.Default.defaultVoice = selectedVoice.Name.ToString();
+            }
         }
     }
 }

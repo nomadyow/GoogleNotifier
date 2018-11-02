@@ -368,6 +368,7 @@
             this.comboBoxVoice.Name = "comboBoxVoice";
             this.comboBoxVoice.Size = new System.Drawing.Size(371, 21);
             this.comboBoxVoice.TabIndex = 28;
+            this.comboBoxVoice.SelectedIndexChanged += new System.EventHandler(this.comboBoxVoice_SelectedIndexChanged);
             // 
             // FormGoogleNotifier
             // 
